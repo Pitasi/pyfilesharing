@@ -1,9 +1,13 @@
+#!/usr/bin/env python3
+
 import socket
 from sys import platform
 import http.server
 import socketserver
-import pyqrcode
-
+try:
+    import pyqrcode
+except ModuleNotFoundError:
+    print('Please install pyqrcode module for QR Code generation.')
 
 def get_my_ip():
     '''
@@ -38,10 +42,14 @@ def main():
     print('#'*len(server_url))
     print('Use {}-C to stop.'.format('CMD' if platform == 'darwin' else 'CTRL'))
 
-    qrcode = pyqrcode.create(server_url)
-    print(qrcode.terminal(quiet_zone=1))
+    try:
+        qrcode = pyqrcode.create(server_url)
+        print(qrcode.terminal(quiet_zone=1))
+    except NameError:
+        pass
     start_server(PORT)
 
 
 if __name__ == '__main__':
     main()
+
